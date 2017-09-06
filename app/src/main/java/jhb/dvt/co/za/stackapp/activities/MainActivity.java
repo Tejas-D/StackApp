@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ImageView;
 
 import jhb.dvt.co.za.stackapp.R;
 import jhb.dvt.co.za.stackapp.adapters.QuestionsAdapter;
 import jhb.dvt.co.za.stackapp.asynctasks.QuestionsAsyncTask;
 import jhb.dvt.co.za.stackapp.asynctasks.QuestionsAsyncTask.QuestionsResultListener;
+import jhb.dvt.co.za.stackapp.utils.HttpUtils;
 
 public class MainActivity extends Activity implements QuestionsResultListener {
 
@@ -21,11 +24,16 @@ public class MainActivity extends Activity implements QuestionsResultListener {
 
         recyclerView = findViewById(R.id.stackRecyclerView);
 
+        ImageView noInternetImage = findViewById(R.id.noInternetPlaceImage);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
         recyclerView.setLayoutManager(layoutManager);
 
-        getDataAndPopulateRecycerView();
+        if (HttpUtils.isHTTPConnectionPossible(this))
+            getDataAndPopulateRecycerView();
+        else
+            noInternetImage.setVisibility(View.VISIBLE);
+
     }
 
     private void getDataAndPopulateRecycerView() {
